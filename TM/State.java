@@ -1,4 +1,4 @@
-package TM;
+package tm;
 
 public class State {
 
