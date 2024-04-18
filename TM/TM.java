@@ -3,15 +3,15 @@ package tm;
 import java.util.Map;
 import java.util.HashMap;
 
-public class TuringMachine {
+public class TM {
     private Map<Integer, TMState> states;
     private int[] tape;
     private int currentState;
     private int headPosition;
 
-    public TuringMachine(Map<Integer, TMState> states, String inputString) {
+    public TM(Map<Integer, TMState> states, String inputString) {
         this.states = states;
-        this.tape = new int[inputString.length() + 2]; // +2 for left and right sentinels
+        this.tape = new int[Math.max(inputString.length(), 1) + 2]; // +2 for left and right sentinels
         this.currentState = 0;
         this.headPosition = 1;
 
@@ -26,14 +26,18 @@ public class TuringMachine {
             int currentSymbol = tape[headPosition];
             TMState.Transition transition = states.get(currentState).getTransition(currentSymbol);
 
+            if (transition == null) {
+                break; // If there is no valid transition, halt the machine
+            }
+
             // Update the tape
             tape[headPosition] = transition.getWriteSymbol();
 
             // Move the head position
             if (transition.getDirection() == 'L') {
-                headPosition--;
+                headPosition = Math.max(headPosition - 1, 1);
             } else {
-                headPosition++;
+                headPosition = Math.min(headPosition + 1, tape.length - 2);
             }
 
             // Update the current state
@@ -43,10 +47,8 @@ public class TuringMachine {
 
     public void printTape() {
         StringBuilder sb = new StringBuilder();
-        for (int symbol : tape) {
-            if (symbol != 0) {
-                sb.append(symbol);
-            }
+        for (int i = 1; i < tape.length - 1; i++) {
+            sb.append(tape[i]);
         }
         System.out.println(sb.toString());
     }
