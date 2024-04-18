@@ -12,7 +12,7 @@ public class TMState {
         this.transitions = new HashMap<>();
     }
 
-    public void addTransition(int symbol, int nextState, int writeSymbol, char direction) {
+    public void addTransition(int symbol, TMState nextState, int writeSymbol, char direction) {
         transitions.put(symbol, new Transition(nextState, writeSymbol, direction));
     }
 
@@ -20,19 +20,23 @@ public class TMState {
         return transitions.get(symbol);
     }
 
+    public int getStateNumber() {
+        return stateNumber;
+    }  
+
     // Inner class representing a transition
     public static class Transition {
-        private int nextState;
+        private TMState nextState;
         private int writeSymbol;
         private char direction;
 
-        public Transition(int nextState, int writeSymbol, char direction) {
+        public Transition(TMState nextState, int writeSymbol, char direction) {
             this.nextState = nextState;
             this.writeSymbol = writeSymbol;
             this.direction = direction;
         }
 
-        public int getNextState() {
+        public TMState getNextState() {
             return nextState;
         }
 

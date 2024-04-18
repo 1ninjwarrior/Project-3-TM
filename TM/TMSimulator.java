@@ -28,15 +28,14 @@ public class TMSimulator {
             }
 
             // Parse the transition function
-            for (int i = 0; i < (numSymbols + 1) * (numStates - 1); i++) {
-                String[] transition = br.readLine().split(",");
-                int fromState = i / (numSymbols + 1);
-                int symbol = i % (numSymbols + 1);
-                int nextState = Integer.parseInt(transition[0]);
-                int writeSymbol = Integer.parseInt(transition[1]);
-                char direction = transition[2].charAt(0);
-
-                states.get(fromState).addTransition(symbol, nextState, writeSymbol, direction);
+            for (int i = 0; i <= numStates; i++) {
+                for (int j = 0; j <= numSymbols+1; j++) { 
+                    String[] transition = br.readLine().split(",");
+                    int nextState = Integer.parseInt(transition[0]);
+                    int writeSymbol = Integer.parseInt(transition[1]);
+                    char direction = transition[2].charAt(0);
+                    states.get(i).addTransition(j, states.get(nextState), writeSymbol, direction);
+                }
             }
 
             // Read the input string
