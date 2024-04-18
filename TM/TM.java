@@ -73,6 +73,11 @@ public class TM {
             startIndex++;
         }
         
+        // If the start index is not 0 and the previous symbol is 0, include it
+        if (startIndex > 0 && tape.get(startIndex - 1) == 0) {
+            startIndex--;
+        }
+        
         // Find the end index of non-zero symbols
         while (endIndex >= 0 && tape.get(endIndex) == 0) {
             endIndex--;
