@@ -16,7 +16,7 @@ public class TM {
         this.states = states;
         this.tape = new ArrayList<>(Collections.nCopies(1000, 0)); // Increase the tape size to accommodate larger inputs
         this.currentState = 0;
-        this.headPosition = 500; // Start the head position in the middle of the tape
+        this.headPosition = 0; // Start the head position in the middle of the tape
 
         // Initialize the tape with the input string
         for (int i = 0; i < inputString.length(); i++) {
