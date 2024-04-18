@@ -11,13 +11,13 @@ public class TM {
 
     public TM(Map<Integer, TMState> states, String inputString) {
         this.states = states;
-        this.tape = new int[Math.max(inputString.length(), 1) + 2]; // +2 for left and right sentinels
+        this.tape = new int[1000]; // Increase the tape size to accommodate larger inputs
         this.currentState = 0;
-        this.headPosition = 1;
+        this.headPosition = 500; // Start the head position in the middle of the tape
 
         // Initialize the tape with the input string
         for (int i = 0; i < inputString.length(); i++) {
-            tape[i + 1] = inputString.charAt(i) - '0';
+            tape[headPosition + i] = inputString.charAt(i) - '0';
         }
     }
 
@@ -35,9 +35,9 @@ public class TM {
 
             // Move the head position
             if (transition.getDirection() == 'L') {
-                headPosition = Math.max(headPosition - 1, 1);
+                headPosition--;
             } else {
-                headPosition = Math.min(headPosition + 1, tape.length - 2);
+                headPosition++;
             }
 
             // Update the current state
@@ -47,9 +47,32 @@ public class TM {
 
     public void printTape() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 1; i < tape.length - 1; i++) {
+        int startIndex = 0;
+        int endIndex = tape.length - 1;
+        
+        // Find the start index of non-zero symbols
+        while (startIndex < tape.length && tape[startIndex] == 0) {
+            startIndex++;
+        }
+        
+        // Find the end index of non-zero symbols
+        while (endIndex >= 0 && tape[endIndex] == 0) {
+            endIndex--;
+        }
+        
+        // Print the tape content
+        for (int i = startIndex; i <= endIndex; i++) {
             sb.append(tape[i]);
         }
-        System.out.println(sb.toString());
+        
+        String tapeContent = sb.toString();
+        System.out.println(tapeContent);
+        System.out.println("output length: " + tapeContent.length());
+        
+        int sumOfSymbols = 0;
+        for (char symbol : tapeContent.toCharArray()) {
+            sumOfSymbols += symbol - '0';
+        }
+        System.out.println("sum of symbols: " + sumOfSymbols);
     }
 }

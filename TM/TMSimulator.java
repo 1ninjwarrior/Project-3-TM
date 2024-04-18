@@ -28,8 +28,8 @@ public class TMSimulator {
             }
 
             // Parse the transition function
-            for (int i = 0; i < numStates-1; i++) {
-                for (int j = 0; j <= numSymbols; j++) { 
+            for (int i = 0; i < numStates - 1; i++) {
+                for (int j = 0; j <= numSymbols; j++) {
                     String[] transition = br.readLine().split(",");
                     int nextState = Integer.parseInt(transition[0]);
                     int writeSymbol = Integer.parseInt(transition[1]);
@@ -42,6 +42,8 @@ public class TMSimulator {
             inputString = br.readLine();
             if (inputString == null) {
                 inputString = "";
+            } else {
+                inputString = inputString.trim();
             }
         } catch (IOException e) {
             System.out.println("Error reading the input file: " + e.getMessage());
