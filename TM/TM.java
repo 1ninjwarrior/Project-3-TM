@@ -41,7 +41,7 @@ public class TM {
             }
 
             // Update the current state
-            currentState = transition.getNextState();
+            currentState = transition.getNextState().getStateNumber();
         }
     }
 

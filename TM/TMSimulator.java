@@ -28,7 +28,7 @@ public class TMSimulator {
             }
 
             // Parse the transition function
-            for (int i = 0; i < numStates; i++) {
+            for (int i = 0; i < numStates-1; i++) {
                 for (int j = 0; j <= numSymbols; j++) { 
                     String[] transition = br.readLine().split(",");
                     int nextState = Integer.parseInt(transition[0]);
