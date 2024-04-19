@@ -3,66 +3,86 @@ package tm;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
-public class TM {
+/**
+ * Represents a Turing Machine object
+ * 
+ * @authors Jaden Dawdy, Xian Ma
+ */
+public class TM implements TMInterface {
     private Map<Integer, TMState> states;
     private List<Integer> tape;
     private int currentState;
     private int headPosition;
 
+    /**
+     * Constructs a Turing Machine with the given states and input string
+     * @param states
+     * @param inputString
+     */
     public TM(Map<Integer, TMState> states, String inputString) {
         this.states = states;
-        this.tape = new ArrayList<>(Collections.nCopies(1000, 0)); // Increase the tape size to accommodate larger inputs
+        this.tape = new ArrayList<>(Collections.nCopies(1000, 0));
         this.currentState = 0;
-        this.headPosition = 0; // Start the head position in the middle of the tape
-
-        // Initialize the tape with the input string
+        this.headPosition = 0;
+        
+        // initialize the tape
         for (int i = 0; i < inputString.length(); i++) {
+            // convert char to int
             set(headPosition + i, inputString.charAt(i) - '0');
         }
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void simulate() {
-        while (currentState != states.size() - 1) { // While not in the halting state
+        while (currentState != states.size() - 1) {
             int currentSymbol = tape.get(headPosition);
-            TMState.Transition transition = states.get(currentState).getTransition(currentSymbol);
-
+            Transition transition = states.get(currentState).getTransition(currentSymbol);
+            
             if (transition == null) {
-                break; // If there is no valid transition, halt the machine
+                break;
             }
 
-            // Update the tape
             set(headPosition, transition.getWriteSymbol());
 
-            // Move the head position
+            // check where to add to tape
             if (transition.getDirection() == 'L') {
+                // at to beginning
                 if (headPosition == 0) {
-                    // If the head position is already at the start of the tape, expand the tape at the beginning
                     tape.add(0, 0);
                 } else {
                     headPosition--;
                 }
             } else {
-                headPosition++;
-                // Check if the head position is out of bounds of the current tape size
-                if (headPosition >= tape.size()) {
-                    // Expand the tape by adding a zero at the end
+                // at to end
+                if (++headPosition >= tape.size()) {
                     tape.add(0);
                 }
             }
 
-            // Update the current state
             currentState = transition.getNextState().getStateNumber();
         }
     }
 
-    public void expandTape() {
-        tape.addAll(Collections.nCopies(1000, 0)); // Add 1000 more zeros to the end of the tape
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void expandTape(int index) {
+        // Calculate how many more elements we need
+        int additionalElementsNeeded = index - tape.size() + 1;
+
+        tape.addAll(Collections.nCopies(additionalElementsNeeded, 0));
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void printTape() {
         StringBuilder sb = new StringBuilder();
         int startIndex = 0;
@@ -83,13 +103,13 @@ public class TM {
             endIndex--;
         }
         
-        // Print the tape content
+        // Append tape content
         for (int i = startIndex; i <= endIndex; i++) {
             sb.append(tape.get(i));
         }
         
         String tapeContent = sb.toString();
-        System.out.println(tapeContent);
+        System.out.println("output: " + tapeContent);
         System.out.println("output length: " + tapeContent.length());
         
         int sumOfSymbols = 0;
@@ -99,15 +119,15 @@ public class TM {
         System.out.println("sum of symbols: " + sumOfSymbols);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void set(int index, int value) {
-        // Check if the index is out of bounds of the current tape size
         if (index >= tape.size()) {
-            // Calculate how many more elements we need
-            int additionalElementsNeeded = index - tape.size() + 1;
-            // Expand the tape by the number of additional elements needed
-            tape.addAll(Collections.nCopies(additionalElementsNeeded, 0));
+            expandTape(index);
         }
-        // Set the value on the tape
+
         tape.set(index, value);
     }
 }
