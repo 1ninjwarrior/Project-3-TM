@@ -23,7 +23,7 @@ public class TM implements TMInterface {
      */
     public TM(Map<Integer, TMState> states, String inputString) {
         this.states = states;
-        this.tape = new ArrayList<>(Collections.nCopies(1000, 0));
+        this.tape = new ArrayList<>(Collections.nCopies(1000, 0)); // initial tape size is 1000
         this.currentState = 0;
         this.headPosition = 0;
         

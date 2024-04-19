@@ -26,5 +26,5 @@ $ javac tm/*.java
 To run
 
 ```
-$ java tm/TMSimulator <fileName>
+$ java tm.TMSimulator <fileName>
 ```
